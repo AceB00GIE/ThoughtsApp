@@ -24,14 +24,19 @@
 
         <section class="input-section">
             <form id="thoughtForm" class="thought-form">
-                <input
-                    type="text"
-                    id="thoughtInput"
-                    class="thought-input"
-                    placeholder="What's on your mind?"
-                    autocomplete="off"
-                    required
-                >
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        id="thoughtInput"
+                        class="thought-input"
+                        placeholder="What's on your mind?"
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="button" class="mic-btn" id="micBtn" aria-label="Voice input">
+                        <span class="mic-icon">🎤</span>
+                    </button>
+                </div>
                 <div class="tag-select-wrapper">
                     <select id="tagSelect" class="tag-select">
                         <option value="work">Work</option>

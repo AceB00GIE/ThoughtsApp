@@ -12,7 +12,12 @@
     const emptyState = document.getElementById('emptyState');
     const thoughtCount = document.getElementById('thoughtCount');
     const themeToggle = document.getElementById('themeToggle');
+    const micBtn = document.getElementById('micBtn');
     const tabs = document.querySelectorAll('.tab');
+
+    // Speech Recognition
+    let recognition = null;
+    let isListening = false;
 
     // State
     let thoughts = [];
@@ -27,8 +32,89 @@
     function init() {
         loadThoughts();
         loadTheme();
+        setupSpeechRecognition();
         setupEventListeners();
         renderThoughts();
+    }
+
+    // Setup Speech Recognition
+    function setupSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            // Speech recognition not supported
+            micBtn.classList.add('disabled');
+            micBtn.title = 'Voice input not supported in this browser';
+            return;
+        }
+
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = function() {
+            isListening = true;
+            micBtn.classList.add('listening');
+            thoughtInput.placeholder = 'Listening...';
+        };
+
+        recognition.onend = function() {
+            isListening = false;
+            micBtn.classList.remove('listening');
+            thoughtInput.placeholder = "What's on your mind?";
+        };
+
+        recognition.onresult = function(event) {
+            let finalTranscript = '';
+            let interimTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript;
+                } else {
+                    interimTranscript += transcript;
+                }
+            }
+
+            // Show interim results while speaking
+            if (interimTranscript) {
+                thoughtInput.value = interimTranscript;
+            }
+
+            // Set final result
+            if (finalTranscript) {
+                thoughtInput.value = finalTranscript;
+                thoughtInput.focus();
+            }
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            isListening = false;
+            micBtn.classList.remove('listening');
+            thoughtInput.placeholder = "What's on your mind?";
+
+            if (event.error === 'not-allowed') {
+                alert('Microphone access denied. Please allow microphone access to use voice input.');
+            }
+        };
+    }
+
+    // Toggle voice input
+    function toggleVoiceInput() {
+        if (!recognition) {
+            alert('Voice input is not supported in your browser. Try Chrome or Safari.');
+            return;
+        }
+
+        if (isListening) {
+            recognition.stop();
+        } else {
+            thoughtInput.value = '';
+            recognition.start();
+        }
     }
 
     // Load thoughts from localStorage
@@ -90,6 +176,9 @@
 
         // Theme toggle
         themeToggle.addEventListener('click', toggleTheme);
+
+        // Microphone button
+        micBtn.addEventListener('click', toggleVoiceInput);
 
         // Tab clicks
         tabs.forEach(tab => {
