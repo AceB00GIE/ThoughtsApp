@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Thoughts</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>Thoughts</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <span class="icon-sun">☀️</span>
+                <span class="icon-moon">🌙</span>
+            </button>
+        </header>
+
+        <section class="input-section">
+            <form id="thoughtForm" class="thought-form">
+                <input
+                    type="text"
+                    id="thoughtInput"
+                    class="thought-input"
+                    placeholder="What's on your mind?"
+                    autocomplete="off"
+                    required
+                >
+                <div class="tag-select-wrapper">
+                    <select id="tagSelect" class="tag-select">
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="ideas">Ideas</option>
+                        <option value="todo">To-Do</option>
+                    </select>
+                    <button type="submit" class="add-btn">Add</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="search-section">
+            <input
+                type="search"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search thoughts..."
+            >
+        </section>
+
+        <nav class="tabs">
+            <button class="tab active" data-filter="today">Today</button>
+            <button class="tab" data-filter="all">All</button>
+            <button class="tab" data-filter="work">Work</button>
+            <button class="tab" data-filter="personal">Personal</button>
+            <button class="tab" data-filter="ideas">Ideas</button>
+            <button class="tab" data-filter="todo">To-Do</button>
+            <button class="tab" data-filter="week">This Week</button>
+            <button class="tab" data-filter="archived">Archived</button>
+        </nav>
+
+        <main class="thoughts-container">
+            <ul id="thoughtsList" class="thoughts-list">
+                <!-- Thoughts will be rendered here -->
+            </ul>
+            <p id="emptyState" class="empty-state">No thoughts yet. Add one above!</p>
+        </main>
+
+        <footer class="footer">
+            <p class="thought-count"><span id="thoughtCount">0</span> thoughts</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
